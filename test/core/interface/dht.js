@@ -1,7 +1,6 @@
 /* eslint-env mocha */
 'use strict'
 
-/*
 const test = require('interface-ipfs-core')
 const parallel = require('async/parallel')
 
@@ -29,4 +28,3 @@ const common = {
   }
 }
 test.dht(common)
-*/

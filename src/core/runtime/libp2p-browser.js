@@ -6,21 +6,38 @@ const WebSocketStar = require('libp2p-websocket-star')
 const Multiplex = require('libp2p-mplex')
 const SECIO = require('libp2p-secio')
 const Railing = require('libp2p-railing')
+const KadDHT = require('libp2p-kad-dht')
 const libp2p = require('libp2p')
 
 class Node extends libp2p {
   constructor (peerInfo, peerBook, options) {
     options = options || {}
-    const wrtcstar = new WebRTCStar({id: peerInfo.id})
-    const wsstar = new WebSocketStar({id: peerInfo.id})
+
+    const wrtcstar = new WebRTCStar({ id: peerInfo.id })
+    const wsstar = new WebSocketStar({ id: peerInfo.id })
 
     const modules = {
-      transport: [new WS(), wrtcstar, wsstar],
+      transport: [
+        new WS(),
+        wrtcstar,
+        wsstar
+      ],
       connection: {
-        muxer: [Multiplex],
-        crypto: [SECIO]
+        muxer: [
+          Multiplex
+        ],
+        crypto: [
+          SECIO
+        ]
       },
-      discovery: [wrtcstar.discovery, wsstar.discovery]
+      discovery: [
+        wrtcstar.discovery,
+        wsstar.discovery
+      ]
+    }
+
+    if (options.dht) {
+      modules.DHT = KadDHT
     }
 
     if (options.bootstrap) {
