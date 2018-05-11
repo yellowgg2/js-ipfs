@@ -12,7 +12,7 @@ module.exports = (domain, opts, callback) => {
     .then((response) => {
       if (response.ok) return response.json()
 
-      return response.body()
+      return response.text()
         .then((text) => {
           throw new Error(`failed to fetch ${url}: ${response.status} ${text}`)
         })
