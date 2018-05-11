@@ -10,7 +10,12 @@ module.exports = (domain, opts, callback) => {
 
   self.fetch(url, {mode: 'cors'})
     .then((response) => {
-      return response.json()
+      if (response.ok) return response.json()
+
+      return response.body()
+        .then((text) => {
+          throw new Error(`failed to fetch ${url}: ${response.status} ${text}`)
+        })
     })
     .then((response) => {
       if (response.Path) {
