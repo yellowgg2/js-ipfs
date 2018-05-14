@@ -12,9 +12,15 @@ module.exports = (domain, opts, callback) => {
     .then((response) => {
       if (response.ok) return response.json()
 
+      let headers = '\n\n'
+
+      for (var pair of response.headers.entries()) {
+        headers += pair[0] + ': ' + pair[1]
+      }
+
       return response.text()
         .then((text) => {
-          throw new Error(`failed to fetch ${url}: ${response.status} ${text}`)
+          throw new Error(`failed to fetch ${url}: ${response.status} ${text} ${headers}`)
         })
     })
     .then((response) => {
