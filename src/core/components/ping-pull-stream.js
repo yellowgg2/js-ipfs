@@ -6,6 +6,7 @@ const PeerId = require('peer-id')
 const pull = require('pull-stream')
 const Pushable = require('pull-pushable')
 const waterfall = require('async/waterfall')
+const setImmediate = require('async/setImmediate')
 
 const log = debug('jsipfs:pingPullStream')
 log.error = debug('jsipfs:pingPullStream:error')
@@ -27,7 +28,7 @@ module.exports = function pingPullStream (self) {
       if (err) {
         log.error(err)
         source.push(getPacket({ success: false, text: err.toString() }))
-        source.end(err)
+        setImmediate(() => source.end(err))
       }
     })
 
@@ -86,7 +87,7 @@ function runPing (libp2pNode, statusStream, count, peer, cb) {
         const average = totalTime / count
         p.stop()
         statusStream.push(getPacket({ text: `Average latency: ${average}ms` }))
-        statusStream.end()
+        setImmediate(() => statusStream.end())
       }
     })
 
@@ -94,7 +95,7 @@ function runPing (libp2pNode, statusStream, count, peer, cb) {
       log.error(err)
       p.stop()
       statusStream.push(getPacket({ success: false, text: err.toString() }))
-      statusStream.end(err)
+      setImmediate(() => statusStream.end(err))
     })
 
     p.start()
