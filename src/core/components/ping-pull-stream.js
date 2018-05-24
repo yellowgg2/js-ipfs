@@ -80,6 +80,7 @@ function runPing (libp2pNode, statusStream, count, peer, cb) {
 
     p.on('ping', (time) => {
       statusStream.push(getPacket({ time: time }))
+      console.log('GOT PONG', getPacket({ time: time }))
       totalTime += time
       packetCount++
       if (packetCount >= count) {
