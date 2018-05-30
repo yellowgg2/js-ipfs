@@ -61,6 +61,7 @@ You can check the development status at the [Waffle Board](https://waffle.io/ipf
   - [IPFS CLI](#ipfs-cli)
   - [IPFS Daemon](#ipfs-daemon)
   - [IPFS Module (use IPFS as a module in Node.js or in the Browser)](#ipfs-module)
+  - [Experimental Features](#experimental-features)
   - [Tutorials and Examples](#tutorials-and-examples)
   - [API Docs](#api)
     - [Constructor](#ipfs-constructor)
@@ -186,6 +187,19 @@ node.on('ready', () => {
   })
 })
 ```
+
+### Experimental Features
+
+To enable or disable experimental features, please use the `jsipfs config` command:
+
+```sh
+$ jsipfs config --bool EXPERIMENTAL.pubsub true
+$ jsipfs config --bool EXPERIMENTAL.pubsub false
+```
+
+If running the daemon you will need to restart it for this to take effect.
+
+See the `EXPERIMENTAL` options object passed to the IPFS constructor for which keys map to which experimental features.
 
 ### [Tutorials and Examples](/examples)
 
