@@ -1,5 +1,15 @@
 'use strict'
 
+process.on('error', (error) => {
+  console.error(error)
+  process.exit(1)
+})
+
+process.on('uncaughtException', (error) => {
+  console.error(error)
+  process.exit(1)
+})
+
 const series = require('async/series')
 const Hapi = require('hapi')
 const debug = require('debug')
@@ -71,7 +81,8 @@ function HttpApi (repo, config, cliArgs) {
             EXPERIMENTAL: {
               pubsub: cliArgs && cliArgs.enablePubsubExperiment,
               dht: cliArgs && cliArgs.enableDhtExperiment,
-              sharding: cliArgs && cliArgs.enableShardingExperiment
+              sharding: cliArgs && cliArgs.enableShardingExperiment,
+              mfs: cliArgs && cliArgs.enableMfsExperiment
             },
             libp2p: libp2p
           })

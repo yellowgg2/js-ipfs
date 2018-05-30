@@ -61,7 +61,7 @@
   },
   "homepage": "https://github.com/ipfs/js-ipfs#readme",
   "devDependencies": {
-    "aegir": "^13.1.0",
+    "aegir": "^14.0.0",
     "buffer-loader": "~0.0.1",
     "chai": "^4.1.2",
     "delay": "^2.0.0",
@@ -72,8 +72,8 @@
     "execa": "~0.10.0",
     "expose-loader": "~0.7.5",
     "form-data": "^2.3.2",
-    "hat": "0.0.3",
-    "interface-ipfs-core": "~0.66.2",
+    "hat": "~0.0.3",
+    "interface-ipfs-core": "ipfs/interface-ipfs-core#enable-js-mfs-tests",
     "ipfsd-ctl": "~0.37.3",
     "lodash": "^4.17.10",
     "mocha": "^5.1.1",
@@ -105,10 +105,11 @@
     "hapi-set-header": "^1.0.2",
     "hoek": "^5.0.3",
     "human-to-milliseconds": "^1.0.0",
-    "ipfs-api": "^22.0.0",
+    "ipfs-api": "ipfs/js-ipfs-api#support-non-array-arguments",
     "ipfs-bitswap": "~0.20.0",
     "ipfs-block": "~0.7.1",
     "ipfs-block-service": "~0.14.0",
+    "ipfs-mfs": "~0.0.2",
     "ipfs-multipart": "~0.1.0",
     "ipfs-repo": "~0.22.1",
     "ipfs-unixfs": "~0.1.15",
@@ -171,7 +172,8 @@
     "through2": "^2.0.3",
     "update-notifier": "^2.5.0",
     "yargs": "^11.0.0",
-    "yargs-parser": "^10.0.0"
+    "yargs-parser": "^10.0.0",
+    "yargs-promise": "^1.1.0"
   },
   "optionalDependencies": {
     "prom-client": "^11.0.0",

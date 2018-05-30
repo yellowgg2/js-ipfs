@@ -46,4 +46,342 @@ describe('.files', () => {
         })
     })
   })
+
+  describe('.ls', function () {
+    it('lists empty directory', () => {
+      return ipfs.files.ls()
+        .then(files => {
+          expect(files).to.be.empty()
+        })
+    })
+
+    it('lists files', () => {
+      const fileName = `single-file-${Math.random()}.txt`
+
+      return ipfs.files.write(`/${fileName}`, Buffer.from('Hello world'), {
+        create: true
+      })
+        .then(() => ipfs.files.ls())
+        .then(files => {
+          expect(files.length).to.equal(1)
+          expect(files[0].name).to.equal(fileName)
+        })
+    })
+
+    it('lists files in directories', () => {
+      const dirName = `dir-${Math.random()}`
+      const fileName = `file-in-dir-${Math.random()}.txt`
+
+      return ipfs.files.write(`/${dirName}/${fileName}`, Buffer.from('Hello world'), {
+        create: true,
+        parents: true
+      })
+        .then(() => ipfs.files.ls(`/${dirName}`))
+        .then(files => {
+          expect(files.length).to.equal(1)
+          expect(files[0].name).to.equal(fileName)
+        })
+    })
+  })
+
+  describe('.cp', function () {
+    it('copies a file', () => {
+      const source = `source-file-${Math.random()}.txt`
+      const destination = `destination-file-${Math.random()}.txt`
+
+      return ipfs.files.write(`/${source}`, Buffer.from('Hello world'), {
+        create: true
+      })
+        .then(() => ipfs.files.cp(`/${source}`, `/${destination}`))
+        .then(() => ipfs.files.ls(`/`))
+        .then(files => {
+          const sourceFile = files
+            .filter(file => file.name === source)
+            .pop()
+
+          expect(sourceFile.type).to.equal('file')
+
+          const destFile = files
+            .filter(file => file.name === destination)
+            .pop()
+
+          expect(destFile.type).to.equal('file')
+        })
+    })
+
+    it('copies a directory', () => {
+      const source = `source-dir-${Math.random()}`
+      const destination = `destination-dir-${Math.random()}`
+
+      return ipfs.files.mkdir(`/${source}`)
+        .then(() => ipfs.files.cp(`/${source}`, `/${destination}`))
+        .then(() => ipfs.files.ls(`/`))
+        .then(files => {
+          const sourceDir = files
+            .filter(file => file.name === source)
+            .pop()
+
+          expect(sourceDir.type).to.equal('directory')
+
+          const destDir = files
+            .filter(file => file.name === destination)
+            .pop()
+
+          expect(destDir.type).to.equal('directory')
+        })
+    })
+
+    it('copies a file with array args', () => {
+      const source = `source-file-${Math.random()}.txt`
+      const destination = `destination-file-${Math.random()}.txt`
+
+      return ipfs.files.write(`/${source}`, Buffer.from('Hello world'), {
+        create: true
+      })
+        .then(() => ipfs.files.cp([`/${source}`, `/${destination}`]))
+        .then(() => ipfs.files.ls(`/`))
+        .then(files => {
+          const sourceFile = files
+            .filter(file => file.name === source)
+            .pop()
+
+          expect(sourceFile.type).to.equal('file')
+
+          const destFile = files
+            .filter(file => file.name === destination)
+            .pop()
+
+          expect(destFile.type).to.equal('file')
+        })
+    })
+
+    it('copies a directory with array args', () => {
+      const source = `source-dir-${Math.random()}`
+      const destination = `destination-dir-${Math.random()}`
+
+      return ipfs.files.mkdir(`/${source}`)
+        .then(() => ipfs.files.cp([`/${source}`, `/${destination}`]))
+        .then(() => ipfs.files.ls(`/`))
+        .then(files => {
+          const sourceDir = files
+            .filter(file => file.name === source)
+            .pop()
+
+          expect(sourceDir.type).to.equal('directory')
+
+          const destDir = files
+            .filter(file => file.name === destination)
+            .pop()
+
+          expect(destDir.type).to.equal('directory')
+        })
+    })
+  })
+
+  describe('.mkdir', function () {
+    it('makes a directory', () => {
+      const directory = `directory-${Math.random()}`
+
+      return ipfs.files.mkdir(`/${directory}`)
+        .then(() => ipfs.files.ls(`/`))
+        .then(files => {
+          const dir = files
+            .filter(file => file.name === directory)
+            .pop()
+
+          expect(dir.type).to.equal('directory')
+        })
+    })
+  })
+
+  describe('.mv', function () {
+    it('moves a file', () => {
+      const source = `source-file-${Math.random()}.txt`
+      const destination = `destination-file-${Math.random()}.txt`
+
+      return ipfs.files.write(`/${source}`, Buffer.from('Hello world'), {
+        create: true
+      })
+        .then(() => ipfs.files.mv(`/${source}`, `/${destination}`))
+        .then(() => ipfs.files.ls(`/`))
+        .then(files => {
+          const sourceFile = files
+            .filter(file => file.name === source)
+            .pop()
+
+          expect(sourceFile).to.not.exist()
+
+          const destFile = files
+            .filter(file => file.name === destination)
+            .pop()
+
+          expect(destFile.type).to.equal('file')
+        })
+    })
+
+    it('moves a directory', () => {
+      const source = `source-dir-${Math.random()}`
+      const destination = `destination-dir-${Math.random()}`
+
+      return ipfs.files.mkdir(`/${source}`)
+        .then(() => ipfs.files.mv(`/${source}`, `/${destination}`))
+        .then(() => ipfs.files.ls(`/`))
+        .then(files => {
+          const sourceDir = files
+            .filter(file => file.name === source)
+            .pop()
+
+          expect(sourceDir).to.not.exist()
+
+          const destDir = files
+            .filter(file => file.name === destination)
+            .pop()
+
+          expect(destDir.type).to.equal('directory')
+        })
+    })
+
+    it('moves a file with array args', () => {
+      const source = `source-file-${Math.random()}.txt`
+      const destination = `destination-file-${Math.random()}.txt`
+
+      return ipfs.files.write(`/${source}`, Buffer.from('Hello world'), {
+        create: true
+      })
+        .then(() => ipfs.files.mv([`/${source}`, `/${destination}`]))
+        .then(() => ipfs.files.ls(`/`))
+        .then(files => {
+          const sourceFile = files
+            .filter(file => file.name === source)
+            .pop()
+
+          expect(sourceFile).to.not.exist()
+
+          const destFile = files
+            .filter(file => file.name === destination)
+            .pop()
+
+          expect(destFile.type).to.equal('file')
+        })
+    })
+
+    it('moves a directory with array args', () => {
+      const source = `source-dir-${Math.random()}`
+      const destination = `destination-dir-${Math.random()}`
+
+      return ipfs.files.mkdir(`/${source}`)
+        .then(() => ipfs.files.mv([`/${source}`, `/${destination}`]))
+        .then(() => ipfs.files.ls(`/`))
+        .then(files => {
+          const sourceDir = files
+            .filter(file => file.name === source)
+            .pop()
+
+          expect(sourceDir).to.not.exist()
+
+          const destDir = files
+            .filter(file => file.name === destination)
+            .pop()
+
+          expect(destDir.type).to.equal('directory')
+        })
+    })
+  })
+
+  describe('.read', function () {
+    it('reads a file', () => {
+      const fileName = `single-file-${Math.random()}.txt`
+      const content = Buffer.from('Hello world')
+
+      return ipfs.files.write(`/${fileName}`, content, {
+        create: true
+      })
+        .then(() => ipfs.files.read(`/${fileName}`))
+        .then(buffer => {
+          expect(buffer).to.deep.equal(content)
+        })
+    })
+  })
+
+  describe('.rm', function () {
+    it('removes a file', () => {
+      const fileName = `single-file-${Math.random()}.txt`
+
+      return ipfs.files.write(`/${fileName}`, Buffer.from('Hello world'), {
+        create: true
+      })
+        .then(() => ipfs.files.rm(`/${fileName}`))
+        .then(() => ipfs.files.ls(`/`))
+        .then(files => {
+          const file = files
+            .filter(file => file.name === fileName)
+            .pop()
+
+          expect(file).to.not.exist()
+        })
+    })
+
+    it('removes a directory', () => {
+      const dirName = `dir-${Math.random()}`
+      const fileName = `file-in-dir-${Math.random()}.txt`
+
+      return ipfs.files.write(`/${dirName}/${fileName}`, Buffer.from('Hello world'), {
+        create: true,
+        parents: true
+      })
+        .then(() => ipfs.files.rm(`/${dirName}`, {
+          recursive: true
+        }))
+        .then(() => ipfs.files.ls(`/`))
+        .then(files => {
+          const dir = files
+            .filter(file => file.name === dirName)
+            .pop()
+
+          expect(dir).to.not.exist()
+        })
+    })
+  })
+
+  describe('.stat', function () {
+    it('stats a file', () => {
+      const fileName = `single-file-${Math.random()}.txt`
+
+      return ipfs.files.write(`/${fileName}`, Buffer.from('Hello world'), {
+        create: true
+      })
+        .then(() => ipfs.files.stat(`/${fileName}`))
+        .then(stats => {
+          expect(stats).to.deep.equal({
+            blocks: 1,
+            cumulativeSize: 69,
+            hash: 'QmZ84UNmAgJXF1QNqibwbK5fJGgqQo9s7ysyJeLnc3juTj',
+            local: undefined,
+            size: 11,
+            sizeLocal: undefined,
+            type: 'file',
+            withLocality: false
+          })
+        })
+    })
+
+    it('stats a directory', () => {
+      const dirName = `dir-${Math.random()}`
+
+      return ipfs.files.mkdir(`/${dirName}`)
+        .then(() => ipfs.files.stat(`/${dirName}`))
+        .then(stats => {
+          expect(stats).to.deep.equal({
+            blocks: 0,
+            cumulativeSize: 4,
+            hash: 'QmUNLLsPACCz1vLxQVkXqqLX5R1X345qqfHbsf67hvA3Nn',
+            local: undefined,
+            size: 0,
+            sizeLocal: undefined,
+            type: 'directory',
+            withLocality: false
+          })
+        })
+    })
+  })
 })

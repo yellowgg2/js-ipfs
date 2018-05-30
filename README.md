@@ -233,7 +233,8 @@ Creates and returns an instance of an IPFS node. Use the `options` argument to s
         - `hop` (object)
             - `enabled` (boolean): Make this node a relay (other nodes can connect *through* it). (Default: `false`)
             - `active` (boolean): Make this an *active* relay node. Active relay nodes will attempt to dial a destination peer even if that peer is not yet connected to the relay. (Default: `false`)
-            
+    - `mfs` (boolean): Enables Mutable File System commands - see `jsipfs files --help` for more (Default: `false`)
+
 - `config` (object) Modify the default IPFS node config. Find the Node.js defaults at [`src/core/runtime/config-nodejs.js`](https://github.com/ipfs/js-ipfs/tree/master/src/core/runtime/config-nodejs.js) and the browser defaults at [`src/core/runtime/config-browser.js`](https://github.com/ipfs/js-ipfs/tree/master/src/core/runtime/config-browser.js). This object will be *merged* with the default config; it will not replace it.
   
 - `libp2p` (object) add custom modules to the libp2p stack of your node

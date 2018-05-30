@@ -136,6 +136,15 @@ class IPFS extends EventEmitter {
       isIPFS: isIPFS
     }
 
+    // ipfs.files
+    const mfs = components.mfs(this)
+
+    Object.keys(mfs).forEach(key => {
+      if (mfs.hasOwnProperty(key)) {
+        this.files[key] = mfs[key]
+      }
+    })
+
     boot(this)
   }
 }
