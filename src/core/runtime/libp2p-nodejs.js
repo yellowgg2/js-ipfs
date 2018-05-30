@@ -21,11 +21,8 @@ class Node extends libp2p {
         muxer: [Multiplex],
         crypto: [SECIO]
       },
-      discovery: [wsstar.discovery]
-    }
-
-    if (options.dht) {
-      modules.DHT = KadDHT
+      discovery: [wsstar.discovery],
+      DHT: KadDHT
     }
 
     if (options.mdns) {

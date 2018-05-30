@@ -33,11 +33,8 @@ class Node extends libp2p {
       discovery: [
         wrtcstar.discovery,
         wsstar.discovery
-      ]
-    }
-
-    if (options.dht) {
-      modules.DHT = KadDHT
+      ],
+      DHT: KadDHT
     }
 
     if (options.bootstrap) {
