@@ -227,7 +227,6 @@ Creates and returns an instance of an IPFS node. Use the `options` argument to s
 - `EXPERIMENTAL` (object): Enable and configure experimental features.
     - `pubsub` (boolean): Enable libp2p pub-sub. (Default: `false`)
     - `sharding` (boolean): Enable directory sharding. Directories that have many child objects will be represented by multiple DAG nodes instead of just one. It can improve lookup performance when a directory has several thousand files or more. (Default: `false`)
-    - `dht` (boolean): Enable KadDHT. **This is currently not interopable with `go-ipfs`.**
     - `relay` (object): Configure circuit relay (see the [circuit relay tutorial](https://github.com/ipfs/js-ipfs/tree/master/examples/circuit-relaying) to learn more).
         - `enabled` (boolean): Enable circuit relay dialer and listener. (Default: `false`)
         - `hop` (object)
@@ -405,7 +404,13 @@ The core API is grouped into several areas:
   - `ipfs.bitswap.stat()`
   - `ipfs.bitswap.unwant()`
   
-- [dht (not implemented, yet!)](https://github.com/ipfs/interface-ipfs-core/tree/master/SPEC/)
+- [dht](https://github.com/ipfs/interface-ipfs-core/tree/master/SPEC/)
+  - `ipfs.dht.findpeer(peerId, [callback])`
+  - `ipfs.dht.findprovs(multihash, [callback])`
+  - `ipfs.dht.get(key, [callback])`
+  - `ipfs.dht.provide(cid, [callback])`
+  - `ipfs.dht.put(key, value, [callback])`
+  - `ipfs.dht.query(peerId, [callback])`
 
 - [pubsub](https://github.com/ipfs/interface-ipfs-core/tree/master/SPEC/PUBSUB.md)
   - [`ipfs.pubsub.subscribe(topic, handler, options, callback)`](https://github.com/ipfs/interface-ipfs-core/tree/master/SPEC/PUBSUB.md#pubsubsubscribe)
