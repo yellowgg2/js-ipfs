@@ -4,6 +4,7 @@ const promisify = require('promisify-es6')
 const every = require('async/every')
 const PeerId = require('peer-id')
 const CID = require('cids')
+const multihash = require('multihashes')
 const each = require('async/each')
 // const bsplit = require('buffer-split')
 
@@ -17,13 +18,17 @@ module.exports = (self) => {
      * @returns {Promise|void}
      */
     get: promisify((key, options, callback) => {
-      if (!Buffer.isBuffer(key)) {
-        return callback(new Error('Not valid key'))
-      }
-
       if (typeof options === 'function') {
         callback = options
         options = {}
+      }
+
+      if (!Buffer.isBuffer(key)) {
+        try {
+          key = multihash.fromB58String(key)
+        } catch (err) {
+          return callback(err)
+        }
       }
 
       self._libp2pNode.dht.get(key, options.timeout, callback)
@@ -43,7 +48,11 @@ module.exports = (self) => {
      */
     put: promisify((key, value, callback) => {
       if (!Buffer.isBuffer(key)) {
-        return callback(new Error('Not valid key'))
+        try {
+          key = multihash.fromB58String(key)
+        } catch (err) {
+          return callback(err)
+        }
       }
 
       self._libp2pNode.dht.put(key, value, callback)

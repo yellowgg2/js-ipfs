@@ -16,12 +16,22 @@ class Node extends libp2p {
     const wsstar = new WebSocketStar({id: peerInfo.id})
 
     const modules = {
-      transport: [new TCP(), new WS(), wsstar],
+      transport: [
+        new TCP(),
+        new WS(),
+        wsstar
+      ],
       connection: {
-        muxer: [Multiplex],
-        crypto: [SECIO]
+        muxer: [
+          Multiplex
+        ],
+        crypto: [
+          SECIO
+        ]
       },
-      discovery: [wsstar.discovery],
+      discovery: [
+        wsstar.discovery
+      ],
       DHT: KadDHT
     }
 
