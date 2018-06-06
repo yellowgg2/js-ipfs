@@ -48,6 +48,8 @@ describe('interface-ipfs-core tests', () => {
     }
   }))
 
+  tests.ls(defaultCommonFactory)
+
   tests.object(defaultCommonFactory)
 
   tests.ping(defaultCommonFactory, { skip: !isNode })
