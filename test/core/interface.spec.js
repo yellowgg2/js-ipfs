@@ -52,6 +52,8 @@ describe('interface-ipfs-core tests', () => {
 
   tests.object(defaultCommonFactory)
 
+  tests.pin(defaultCommonFactory, { skip: true })
+
   tests.ping(defaultCommonFactory, { skip: !isNode })
 
   tests.pubsub(CommonFactory.create({
