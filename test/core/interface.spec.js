@@ -96,4 +96,8 @@ describe('interface-ipfs-core tests', () => {
       }
     }
   }), { skip: !isNode })
+
+  tests.types(defaultCommonFactory, { skip: true })
+
+  tests.util(defaultCommonFactory, { skip: true })
 })
