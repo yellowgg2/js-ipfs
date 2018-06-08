@@ -122,7 +122,7 @@
     "joi": "^13.2.0",
     "joi-browser": "^13.0.1",
     "joi-multiaddr": "^2.0.0",
-    "libp2p": "~0.20.4",
+    "libp2p": "github:libp2p/js-libp2p#master",
     "libp2p-circuit": "~0.2.0",
     "libp2p-floodsub": "~0.15.0",
     "libp2p-kad-dht": "~0.10.0",
