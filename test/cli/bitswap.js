@@ -3,6 +3,7 @@
 
 const expect = require('chai').expect
 const runOn = require('../utils/on-and-off').on
+const PeerId = require('peer-id')
 
 describe('bitswap', () => runOn((thing) => {
   let ipfs
@@ -21,6 +22,16 @@ describe('bitswap', () => runOn((thing) => {
     return ipfs('bitswap wantlist').then((out) => {
       expect(out).to.eql(key + '\n')
     })
+  })
+
+  it('wantlist peerid', function () {
+    this.timeout(20 * 1000)
+    return PeerId.create((err, peer) => {
+      expect(err).to.not.exist()
+      return ipfs('bitswap wantlist ' + peer.toB58String()).then((out) => {
+        expect(out).to.eql('')
+      });
+    });
   })
 
   it('stat', function () {
