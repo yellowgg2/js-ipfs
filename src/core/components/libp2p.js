@@ -13,7 +13,9 @@ module.exports = function libp2p (self) {
         self.config.get(),
         self.repo.swarmKey()
       ])
-        .then(gotConfig)
+        .then((results) => {
+          gotConfig.apply(null, results)
+        })
         .catch(callback)
 
       function gotConfig (config, swarmKey) {
