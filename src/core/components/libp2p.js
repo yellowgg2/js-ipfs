@@ -4,17 +4,19 @@
 const Node = require('../runtime/libp2p-nodejs')
 const promisify = require('promisify-es6')
 const get = require('lodash.get')
+const Protector = require('libp2p-pnet')
 
 module.exports = function libp2p (self) {
   return {
     start: promisify((callback) => {
-      self.config.get(gotConfig)
+      Promise.all([
+        self.config.get(),
+        self.repo.swarmKey()
+      ])
+        .then(gotConfig)
+        .catch(callback)
 
-      function gotConfig (err, config) {
-        if (err) {
-          return callback(err)
-        }
-
+      function gotConfig (config, swarmKey) {
         const options = {
           mdns: get(config, 'Discovery.MDNS.Enabled'),
           webRTCStar: get(config, 'Discovery.webRTCStar.Enabled'),
@@ -33,6 +35,11 @@ module.exports = function libp2p (self) {
                 get(config, 'EXPERIMENTAL.relay.hop.active', false))
             }
           }
+        }
+
+        // If a psk swarm.key exists in the repo, make the network private
+        if (swarmKey) {
+          options.protector = new Protector(swarmKey)
         }
 
         self._libp2pNode = new Node(self._peerInfo, self._peerInfoBook, options)
